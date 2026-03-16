@@ -31,6 +31,18 @@
 				setcookie("user_id", $row["id"], time() + 3600, "/");
                 setcookie("user_role", $row["profile"], time() + 3600, "/");
 
+                /*setcookie('user_id', $row["id"], [
+                    'expires'  => time() + 3600,
+                    'path'     => '/',
+                    'httponly' => true,     
+                ]);
+
+                setcookie('user_role', $row["profile"], [
+                    'expires'  => time() + 3600,
+                    'path'     => '/',
+                    'httponly' => true,     
+                ]);*/
+
                 header('Location: ./home.php');
                 die();
             }

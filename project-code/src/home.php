@@ -89,12 +89,25 @@
 
         <div style="margin-bottom: 20px; text-align: center;">
             <form action="" method="GET">
-                <input type="text" name="query" placeholder="Rechercher un produit..." style="padding: 10px; width: 250px;">
+                <input type="text" name="query" id="query" placeholder="Rechercher un produit..." style="padding: 10px; width: 250px;">
                 <button type="submit" style="padding: 10px; background-color: #3498db; color: white; border: none; cursor: pointer;">🔍</button>
             </form>
         </div>
 
         <h1>Produits disponibles</h1>
+
+        <span id="search-query-display"></span>
+
+        <!-- For DOM XSS -->
+        <!--script>
+            const searchInput = document.getElementById('query');
+            const display = document.getElementById('search-query-display');
+
+            searchInput.addEventListener('keyup', () => {
+                // Erreur : on utilise innerHTML pour afficher la saisie
+                display.innerHTML = "Vous cherchez : " + searchInput.value;
+            });
+        </script-->
 
         <?php
         if (isset($_GET['query']) && !empty($_GET['query'])) {
@@ -133,7 +146,7 @@
                     ?>
                     <tr>
                         <td>#<?php echo $row["id"]; ?></td>
-                        <td><strong><?php echo $row["prod_label"]; ?></strong></td>
+                        <td><strong><?php echo $row["prod_label"] ; ?></strong></td>
                         <td><span class="badge"><?php echo $row["cat_label"]; ?></span></td>
                         <td>
                             <a href="ajouter-panier.php?id=<?php echo $row["id"]; ?>" class="btn-cart">
