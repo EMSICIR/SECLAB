@@ -1,4 +1,7 @@
 <?php 
+    
+    session_start();
+
     require_once("config.php");
 
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -28,9 +31,12 @@
             if($row = $result->fetch_assoc()) {
                 //$connectedId = $row["id"];
 
-				setcookie("user_id", $row["id"], time() + 3600, "/");
-                setcookie("user_role", $row["profile"], time() + 3600, "/");
+				//setcookie("user_id", $row["id"], time() + 3600, "/");
+                //setcookie("user_role", $row["profile"], time() + 3600, "/");
 
+                $_SESSION['user_id'] = $row["id"];
+                $_SESSION['user_role'] = $row["profile"];
+                
                 /*setcookie('user_id', $row["id"], [
                     'expires'  => time() + 3600,
                     'path'     => '/',

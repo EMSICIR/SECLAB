@@ -1,9 +1,13 @@
 <?php
+
 require_once("config.php");
 
 // 1. On récupère les infos depuis les cookies (ou 0 si non connecté)
-$user_id = isset($_COOKIE['user_id']) ? intval($_COOKIE['user_id']) : 0;
-$user_role = isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : '';
+//$user_id = isset($_COOKIE['user_id']) ? intval($_COOKIE['user_id']) : 0;
+//$user_role = isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : '';
+
+$user_id = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 0;
+$user_role = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : '';
 
 $total_items = 0;
 

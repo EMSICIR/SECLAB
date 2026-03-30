@@ -1,4 +1,13 @@
-<!DOCTYPE html>
+<?php session_start(); 
+
+$user_id = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 0;
+
+if ( !$user_id ){
+    header('Location: ./index.php');
+    exit(0);
+}
+
+?><!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
