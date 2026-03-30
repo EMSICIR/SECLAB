@@ -31,9 +31,11 @@
             if($row = $result->fetch_assoc()) {
                 //$connectedId = $row["id"];
 
-				//setcookie("user_id", $row["id"], time() + 3600, "/");
-                //setcookie("user_role", $row["profile"], time() + 3600, "/");
+				setcookie("user_id", $row["id"], time() + 3600, "/");
+                setcookie("user_role", $row["profile"], time() + 3600, "/");
 
+                session_regenerate_id();
+                
                 $_SESSION['user_id'] = $row["id"];
                 $_SESSION['user_role'] = $row["profile"];
                 
