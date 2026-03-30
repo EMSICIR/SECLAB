@@ -1,0 +1,55 @@
+services:
+  # Base de données (MySQL 8.0)
+  db:
+    image: mysql:8.0
+    container_name: gi2_mysql_db
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: "gi2_securite"
+    volumes:
+      - ./script.sql:/docker-entrypoint-initdb.d/script.sql
+    ports:
+      - "3306:3306"
+
+  # Serveur Web (PHP 8.2 + Apache)
+  web:
+    image: php:8.2-apache
+    container_name: gi2_web_app
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./php:/var/www/html
+    depends_on:
+      - db
+    command: >
+      sh -c "docker-php-ext-install pdo pdo_mysql && apache2-foreground"
+
+  # phpMyAdmin (Interface de gestion DB)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: gi2_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_ARBITRARY: 1 # Permet de se connecter sans mot de passe
+    depends_on:
+      - db
+
+  # 4. L'Attaquant Isolé (Python)
+  attacker:
+    image: python:3.11-slim
+    container_name: gi2_attacker
+    volumes:
+      - ./attacker:/app
+    working_dir: /app
+    depends_on:
+      - web
+    # Installe 'requests' au démarrage et attend les instructions
+    command: >
+      sh -c "pip install requests && sleep infinity"

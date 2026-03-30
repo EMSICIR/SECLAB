@@ -69,5 +69,16 @@ services:
     depends_on:
       - db
 
+  attacker:
+    image: python:3.11-slim
+    container_name: brute_force_attacker
+    volumes:
+      - ../attacker-codes/force-brute/:/app
+    working_dir: /app
+    depends_on:
+      - php
+    # Installe 'requests' au démarrage et attend les instructions
+    command: >
+      sh -c "pip install requests && sleep infinity"
 volumes:
   mysql_data:
