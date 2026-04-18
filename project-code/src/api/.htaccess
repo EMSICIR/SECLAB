@@ -1,0 +1,11 @@
+# Désactive la protection contre les caractères bizarres dans les dossiers
+Options +FollowSymLinks -Indexes
+
+RewriteEngine On
+RewriteBase /api/
+
+# On s'assure qu'Apache ne bloque pas les caractères spéciaux
+# en forçant le passage vers index.php sans filtrage préalable
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

@@ -2,20 +2,20 @@
 FROM php:8.2-apache
 
 # --- DEPENDANCES SYSTEME ---
-# Installation des extensions nécessaires pour MySQL
-# [DÉCOMMENTER LES 3 LIGNES CI-DESSOUS POUR LE SUPPORT LDAP]
-# RUN apt-get update && apt-get install -y \
-#    libldap2-dev \
-#     && rm -rf /var/lib/apt/lists/*
+# Installation des outils nécessaires pour Composer (git, unzip) 
+# et des librairies de compression (zlib, libzip)
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    && docker-php-ext-install mysqli pdo pdo_mysql zip \
+    && rm -rf /var/lib/apt/lists/*
 
-# Installation des extensions nécessaires pour MySQL
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# --- INSTALLATION DE COMPOSER ---
+# On récupère l'exécutable directement depuis l'image officielle de Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# [DÉCOMMENTER LES 2 LIGNES CI-DESSOUS POUR ACTIVER LDAP DANS PHP]
-# RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-#     docker-php-ext-install ldap
-
-# On active le module de réécriture d'Apache (souvent utile en PHP)
+# On active le module de réécriture d'Apache (essentiel pour les API REST)
 RUN a2enmod rewrite
 
 # Copie du code source dans le conteneur
@@ -23,3 +23,6 @@ COPY ./src /var/www/html/
 
 # On s'assure que les permissions sont correctes
 RUN chown -R www-data:www-data /var/www/html
+
+# On définit le répertoire de travail
+WORKDIR /var/www/html
