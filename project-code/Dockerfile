@@ -21,8 +21,13 @@ RUN a2enmod rewrite
 # Copie du code source dans le conteneur
 COPY ./src /var/www/html/
 
-# On s'assure que les permissions sont correctes
-RUN chown -R www-data:www-data /var/www/html
-
 # On définit le répertoire de travail
 WORKDIR /var/www/html
+
+# --- INSTALLATION DE GRAPHQL ---
+# On utilise Composer pour installer la bibliothèque de référence
+# Le flag --no-interaction est utile pour l'automatisation Docker
+RUN composer require webonyx/graphql-php --no-interaction
+
+# On s'assure que les permissions incluent le dossier vendor généré
+RUN chown -R www-data:www-data /var/www/html
